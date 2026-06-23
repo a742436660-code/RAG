@@ -1,0 +1,49 @@
+services:
+  api:
+    build: .
+    command: >
+      sh -c "alembic upgrade head &&
+             uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    environment:
+      RAG_DATA_DIR: /app/data
+      RAG_DATABASE_URL: sqlite:////app/data/app.db
+      RAG_REDIS_URL: redis://redis:6379/0
+      RAG_CELERY_TASK_ALWAYS_EAGER: "false"
+    ports:
+      - "8000:8000"
+    volumes:
+      - rag_data:/app/data
+    depends_on:
+      - redis
+
+  worker:
+    build: .
+    command: celery -A app.workers.tasks worker --loglevel=INFO
+    environment:
+      RAG_DATA_DIR: /app/data
+      RAG_DATABASE_URL: sqlite:////app/data/app.db
+      RAG_REDIS_URL: redis://redis:6379/0
+      RAG_CELERY_TASK_ALWAYS_EAGER: "false"
+    volumes:
+      - rag_data:/app/data
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  streamlit:
+    build: .
+    command: streamlit run streamlit_app.py --server.address 0.0.0.0 --server.port 8501
+    environment:
+      RAG_API_BASE_URL: http://api:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+
+volumes:
+  rag_data:
+
