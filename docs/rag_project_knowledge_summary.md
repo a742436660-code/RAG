@@ -1375,7 +1375,7 @@ RAG_CELERY_TASK_ALWAYS_EAGER=true
 项目支持：
 
 ```text
-RAG_EXTERNAL_ENV_FILE=../Langchain/.env
+RAG_EXTERNAL_ENV_FILE=../secrets/.env
 ```
 
 用于复用外部项目中的 API key。
@@ -2081,7 +2081,7 @@ data/external_run/uvicorn_8000.pid
 停止：
 
 ```powershell
-Stop-Process -Id (Get-Content D:\pycharm\LLM\RAG\data\external_run\uvicorn_8000.pid) -Force
+Stop-Process -Id (Get-Content .\data\external_run\uvicorn_8000.pid) -Force
 ```
 
 ---

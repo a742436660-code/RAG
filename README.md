@@ -63,7 +63,7 @@ deterministic embedding scan over SQLite chunks so the MVP remains runnable.
 This workspace is configured to use DashScope embeddings without copying the API key:
 
 ```env
-RAG_EXTERNAL_ENV_FILE=../Langchain/.env
+RAG_EXTERNAL_ENV_FILE=../secrets/.env
 RAG_EMBEDDING_PROVIDER=dashscope
 RAG_EMBEDDING_MODEL=text-embedding-v4
 RAG_EMBEDDING_DIMENSION=1024
